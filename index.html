@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard Proses Bisnis DJPK</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- SheetJS: used to read probis.xlsx -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+    <header class="header">
+        <div class="header-container">
+
+            <div class="brand">
+                <div class="brand-text">
+                    <h1>Dashboard Proses Bisnis</h1>
+                    <p>Direktorat Jenderal Perimbangan Keuangan</p>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+    <main class="container">
+
+        <!-- PAGE TITLE -->
+        <section class="page-title">
+            <h2>Peta Proses Bisnis DJPK</h2>
+            <p>
+                Dashboard pemetaan proses bisnis dan SOP
+                Direktorat Jenderal Perimbangan Keuangan.
+            </p>
+        </section>
+
+
+        <!-- =================================================
+             STATISTIC CARDS
+        ================================================== -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-label">
+                    Total Proses
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="totalProcess">
+                    0
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-label">
+                    Melibatkan DJPK
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="djpkProcess">
+                    0
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-label">
+                    Level 1–3
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="strategicProcess">
+                    0
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <div class="stat-label">
+                    SOP / Level 4–5
+                </div>
+
+                <div
+                    class="stat-number"
+                    id="sopProcess">
+                    0
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             SEARCH & FILTER
+        ================================================== -->
+        <section class="filter-section">
+
+            <div class="filter-header">
+                <h3>Pencarian dan Filter</h3>
+
+                <button
+                    id="resetFilter"
+                    class="reset-button">
+                    Reset Filter
+                </button>
+            </div>
+
+
+            <div class="filter-grid">
+
+                <!-- SEARCH -->
+                <div class="filter-item search-item">
+
+                    <label for="searchInput">
+                        Cari Proses Bisnis
+                    </label>
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Cari kode, nama proses, PIC, atau SOP...">
+
+                </div>
+
+
+                <!-- LEVEL -->
+                <div class="filter-item">
+
+                    <label for="levelFilter">
+                        Level
+                    </label>
+
+                    <select id="levelFilter">
+                        <option value="">
+                            Semua Level
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <!-- TEMA -->
+                <div class="filter-item">
+
+                    <label for="temaFilter">
+                        Tema
+                    </label>
+
+                    <select id="temaFilter">
+                        <option value="">
+                            Semua Tema
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <!-- UNIT -->
+                <div class="filter-item">
+
+                    <label for="unitFilter">
+                        Unit
+                    </label>
+
+                    <select id="unitFilter">
+                        <option value="">
+                            Semua Unit
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <!-- STATUS -->
+                <div class="filter-item">
+
+                    <label for="statusFilter">
+                        Status
+                    </label>
+
+                    <select id="statusFilter">
+                        <option value="">
+                            Semua Status
+                        </option>
+                    </select>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VIEW SELECTOR
+        ================================================== -->
+
+        <section class="view-selector">
+
+            <button
+                class="view-button active"
+                id="tableViewButton">
+
+                Tabel
+
+            </button>
+
+            <button
+                class="view-button"
+                id="hierarchyViewButton">
+
+                Hierarki Proses
+
+            </button>
+
+        </section>
+
+
+        <!-- =================================================
+             TABLE VIEW
+        ================================================== -->
+
+        <section
+            id="tableView"
+            class="table-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h3>Daftar Proses Bisnis</h3>
+
+                    <p>
+                        Menampilkan
+                        <strong id="resultCount">0</strong>
+                        proses bisnis.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table id="processTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Kode</th>
+
+                            <th>Level</th>
+
+                            <th>Nama Proses</th>
+
+                            <th>Tema</th>
+
+                            <th>PIC</th>
+
+                            <th>Unit Terlibat</th>
+
+                            <th>Status</th>
+
+                            <th>SOP</th>
+
+                            <th>Detail</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="processTableBody">
+
+                        <!--
+                        Data from probis.xlsx
+                        will be inserted here
+                        -->
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             HIERARCHY VIEW
+        ================================================== -->
+
+        <section
+            id="hierarchyView"
+            class="hierarchy-section hidden">
+
+            <div class="section-header">
+
+                <div>
+                    <h3>Hierarki Proses Bisnis</h3>
+
+                    <p>
+                        Hubungan proses bisnis
+                        Level 1 sampai dengan Level 5 / SOP.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div id="hierarchyContainer">
+
+                <!--
+                Hierarchy generated by app.js
+                -->
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =====================================================
+         PROCESS DETAIL MODAL
+    ====================================================== -->
+
+    <div
+        id="detailModal"
+        class="modal">
+
+        <div class="modal-content">
+
+            <button
+                class="modal-close"
+                id="closeModal"
+                aria-label="Tutup">
+
+                &times;
+
+            </button>
+
+
+            <div class="modal-header">
+
+                <span
+                    class="level-badge"
+                    id="modalLevel">
+                </span>
+
+                <h2 id="modalProcessName">
+                    Nama Proses
+                </h2>
+
+                <p id="modalCode">
+                    Kode
+                </p>
+
+            </div>
+
+
+            <div class="modal-body">
+
+
+                <div class="detail-grid">
+
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Tema
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="modalTema">
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            PIC
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="modalPIC">
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Unit Terlibat
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="modalUnit">
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Status
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="modalStatus">
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Parent Process
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="modalParent">
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            SOP
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="modalSOP">
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="description-section">
+
+                    <h4>Deskripsi</h4>
+
+                    <p id="modalDescription">
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         LOADING INDICATOR
+    ====================================================== -->
+
+    <div
+        id="loadingIndicator"
+        class="loading">
+
+        <div class="spinner"></div>
+
+        <p>
+            Memuat data proses bisnis...
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         ERROR MESSAGE
+    ====================================================== -->
+
+    <div
+        id="errorMessage"
+        class="error-message hidden">
+
+        <h3>Data tidak dapat dimuat</h3>
+
+        <p>
+            Pastikan file
+            <strong>probis.xlsx</strong>
+            berada pada folder yang sama dengan
+            index.html.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="footer">
+
+        <div class="container">
+
+            <p>
+                Dashboard Proses Bisnis
+                Direktorat Jenderal Perimbangan Keuangan
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =====================================================
+         APPLICATION JAVASCRIPT
+    ====================================================== -->
+
+    <script src="app.js"></script>
+
+</body>
+</html>
